@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Yarışma Hayvan Kayıt Sistemi v4</title>
+  <title>Yarışma Hayvan Kayıt Sistemi v6 (Tam Bulut)</title>
   <style>
-    :root{
-      --bg:#0f172a; --panel:#111827; --muted:#1f2937; --text:#e5e7eb; --sub:#9ca3af; --brand:#22c55e; --danger:#ef4444; --warn:#f59e0b; --card:#0b1220; --blue:#2563eb;
-    }
+    :root{ --bg:#0f172a; --panel:#111827; --muted:#1f2937; --text:#e5e7eb; --sub:#9ca3af; --brand:#22c55e; --danger:#ef4444; --warn:#f59e0b; --blue:#2563eb; }
     *{box-sizing:border-box}
-    body{margin:0;background:linear-gradient(135deg,#0b1220 0%,#0f172a 60%,#0b1220 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple Color Emoji","Segoe UI Emoji"}
+    body{margin:0;background:linear-gradient(135deg,#0b1220 0%,#0f172a 60%,#0b1220 100%);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
     .container{max-width:1250px;margin:32px auto;padding:0 16px}
     header{display:flex;gap:16px;align-items:center;justify-content:space-between;margin-bottom:20px}
     h1{font-size:24px;margin:0}
@@ -20,16 +18,10 @@
     fieldset{border:1px dashed #263246;border-radius:12px;padding:12px;margin:0 0 14px}
     legend{padding:0 6px;color:var(--sub);font-size:12px}
     label{display:block;font-size:13px;color:var(--sub);margin:10px 0 6px}
-    input,select,textarea{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #22314a;background:#0a1426;color:var(--text)}
-    input:focus,select:focus,textarea:focus{outline:2px solid #2563eb33;border-color:#2563eb66}
+    input,select{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #22314a;background:#0a1426;color:var(--text)}
+    input:focus,select:focus{outline:2px solid #2563eb33;border-color:#2563eb66}
     .row{display:grid;grid-template-columns:repeat(12,1fr);gap:12px}
-    .col-6{grid-column:span 6}
-    .col-5{grid-column:span 5}
-    .col-4{grid-column:span 4}
-    .col-3{grid-column:span 3}
-    .col-2{grid-column:span 2}
-    .col-8{grid-column:span 8}
-    .col-12{grid-column:span 12}
+    .col-6{grid-column:span 6}.col-5{grid-column:span 5}.col-4{grid-column:span 4}.col-3{grid-column:span 3}.col-2{grid-column:span 2}.col-8{grid-column:span 8}.col-12{grid-column:span 12}
     .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
     button{padding:10px 14px;border-radius:12px;border:1px solid #234;cursor:pointer;background:#16223a;color:#dbeafe}
     button.primary{background:var(--brand);color:#052e16;border-color:transparent;font-weight:700}
@@ -43,25 +35,23 @@
     tr td:last-child,tr th:last-child{border-top-right-radius:10px;border-bottom-right-radius:10px}
     .pill{font-size:12px;padding:2px 8px;border-radius:999px;border:1px solid #2a3b58;background:#0b1424;color:#c7d2fe}
     .footer{margin-top:12px;color:#64748b;font-size:12px}
-    .req::after{content:" *";color:#fca5a5}
     .hidden{display:none}
     .subtabs{display:flex;gap:8px;margin:8px 0 14px}
     .subtab{padding:8px 10px;border:1px solid #2a3b58;border-radius:10px;background:#0b1424;cursor:pointer}
     .subtab.active{background:var(--blue);color:#ecfeff;border-color:transparent}
     .dropzone{border:2px dashed #2a3b58;border-radius:16px;padding:26px;text-align:center;background:#0b1424;color:#9fb3c8}
     .dropzone.drag{border-color:var(--brand);background:#0f1b31}
-    .kbd{display:inline-block;padding:2px 6px;border:1px solid #2a3b58;border-bottom-width:2px;border-radius:6px;background:#0b1424}
     .radio-group{display:flex;gap:8px;flex-wrap:wrap}
     .radio-group button{background:#0b1424;border:1px solid #2a3b58;color:#dbeafe}
     .radio-group button.active{background:var(--brand);color:#052e16;border-color:transparent}
+    .note{font-size:12px;color:#9fb3c8}
   </style>
-  <!-- SheetJS (Excel okuma/yazma) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>🐓 Yarışma Hayvan Kayıt Sistemi <span class="pill">v4</span></h1>
+      <h1>🐓 Yarışma Hayvan Kayıt Sistemi <span class="pill">v6</span></h1>
       <nav class="tabs">
         <div class="tab active" data-tab="kayit">Kayıt Formu</div>
         <div class="tab" data-tab="onay">Onay & Liste</div>
@@ -75,11 +65,16 @@
         <fieldset>
           <legend>Katılımcı Bilgileri</legend>
           <div class="row">
-            <div class="col-6">
+            <div class="col-5">
               <label class="req">Ad Soyad</label>
               <input type="text" id="adSoyad" placeholder="Örn: Ahmet Yılmaz" required />
             </div>
-            <div class="col-6">
+            <div class="col-4">
+              <label class="req">Cep Telefonu</label>
+              <input type="tel" id="telefon" inputmode="numeric" pattern="[0-9]{10,15}" placeholder="5XXXXXXXXX" required />
+              <div class="note">Sadece rakam, ülke kodsuz: 5XXXXXXXXX</div>
+            </div>
+            <div class="col-3">
               <label class="req">Bağlı Bulunduğu Dernek</label>
               <select id="dernek" required>
                 <option value="" disabled selected>Dernek Seçiniz...</option>
@@ -147,7 +142,7 @@
               <label class="req">Bilezik Numarası</label>
               <input type="text" id="bilezik" placeholder="TR12345" required />
             </div>
-            <div class="col-1" style="display:flex;align-items:end">
+            <div class="col-1" style="display:flex;align-items:end;justify-content:center">
               <span class="pill">TR</span>
             </div>
           </div>
@@ -171,6 +166,7 @@
             <tr>
               <th>#</th>
               <th>Ad Soyad</th>
+              <th>Telefon</th>
               <th>Dernek</th>
               <th>Tür</th>
               <th>K/T</th>
@@ -191,7 +187,7 @@
         </div>
 
         <div class="btns">
-          <button id="btnOnay" class="primary">Onayla ve Kaydet</button>
+          <button id="btnOnay" class="primary">Onayla ve Kaydet (Bulut)</button>
           <button id="btnBosalt" class="danger">Listeyi Boşalt</button>
         </div>
       </div>
@@ -219,12 +215,21 @@
 
         <!-- Kayıt Listesi -->
         <div id="sub_kayitlar">
-          <h3>Kaydedilen Yarışma Listesi</h3>
+          <div class="btns" style="justify-content:space-between">
+            <div>
+              <button id="btnCloudYenile" class="ghost">Buluttan Yenile (Tüm Sekmeler)</button>
+            </div>
+            <div>
+              <button id="btnCSV" class="warn">CSV Olarak İndir</button>
+              <button id="btnXLSX" class="primary">Excel (XLSX) Olarak İndir</button>
+            </div>
+          </div>
           <table id="tblKayitlar">
             <thead>
               <tr>
                 <th>#</th>
                 <th>Ad Soyad</th>
+                <th>Telefon</th>
                 <th>Dernek</th>
                 <th>Tür</th>
                 <th>K/T</th>
@@ -238,77 +243,79 @@
             </thead>
             <tbody></tbody>
           </table>
-          <div class="btns">
-            <button id="btnCSV" class="warn">CSV Olarak İndir</button>
-            <button id="btnXLSX" class="primary">Excel (XLSX) Olarak İndir</button>
-            <button id="btnHepsiniSil" class="danger">Tüm Kayıtları Sil</button>
-          </div>
         </div>
 
         <!-- Veri Yönetimi: Irk–Cins–Renk -->
         <div id="sub_veriyonetimi" class="hidden">
-          <h3>Irk–Cins–Renk Yönetimi</h3>
-          <p>Excel dosyanı buraya <span class="kbd">sürükleyip bırak</span> ya da tıklayarak seç:</p>
-          <div id="dropIrk" class="dropzone">.xlsx (Sütunlar: <strong>Irk | Cins | Renk</strong>)</div>
-          <input id="fileIrk" type="file" accept=".xlsx,.xls" class="hidden" />
-          <div class="btns">
-            <button id="btnVeriDisaXLSX" class="primary">Verileri Excel Olarak Dışa Aktar</button>
-            <button id="btnVeriDisaJSON" class="ghost">Verileri JSON Olarak İndir</button>
-            <button id="btnVeriTemizle" class="danger">Tüm Listeyi Temizle</button>
-          </div>
+          <h3>Irk–Cins–Renk (Buluttan)</h3>
+          <p class="note">Veriler <strong>IrkCinsRenk</strong> sekmesinden otomatik okunur.</p>
           <table id="tblVeri">
-            <thead>
-              <tr><th>Irk</th><th>Cins</th><th>Renk</th><th>İşlem</th></tr>
-            </thead>
+            <thead><tr><th>Irk</th><th>Cins</th><th>Renk</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
 
         <!-- Veri Yönetimi: Dernekler -->
         <div id="sub_dernek" class="hidden">
-          <h3>Dernek Yönetimi</h3>
-          <p>Excel dosyanı buraya <span class="kbd">sürükleyip bırak</span> ya da tıklayarak seç:</p>
-          <div id="dropDernek" class="dropzone">.xlsx (Sütun: <strong>Dernek</strong>)</div>
-          <input id="fileDernek" type="file" accept=".xlsx,.xls" class="hidden" />
-          <div class="btns">
-            <button id="btnDernekJSON" class="ghost">Listeyi JSON Olarak İndir</button>
-            <button id="btnDernekTemizle" class="danger">Tüm Dernekleri Temizle</button>
-          </div>
+          <h3>Dernekler (Buluttan)</h3>
+          <p class="note">Veriler <strong>Dernekler</strong> sekmesinden otomatik okunur.</p>
           <table id="tblDernek">
-            <thead><tr><th>#</th><th>Dernek</th><th>İşlem</th></tr></thead>
+            <thead><tr><th>#</th><th>Dernek</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
       </div>
     </section>
 
-    <div class="footer">© 2025 – v4. Veriler tarayıcınızın <em>localStorage</em>'ında saklanır.</div>
+    <div class="footer">© 2025 – v6 (Tam Bulut). Kayıtlar Google Sheets'e; listeler buluttan okunur ve cihazda önbelleklenir.</div>
   </div>
 
   <script>
-    // -----------------------------
-    // Kalıcı veri anahtarları
-    // -----------------------------
-    const LS_KAYIT = 'yarisma_kayitlari_v4'; // kalıcı kayıtlar
-    const LS_VERI = 'irk_cins_renk_v4';       // ırk-cins-renk
-    const LS_DERNEK = 'dernek_listesi_v4';    // dernek listesi
+    // ====== Yapılandırma ======
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx-jCOonpWLRzBCniKC-KbZgvbA14F8wtlBF3ZZ4egK8wtWWZzj8Wld4Vfa5F7MSlx1VQ/exec';
+    const SHEET_ID = '1E09uRFI7xyssAkYxX6yblCcJguozh_SqeFEkBsgrBfg';
+    const TAB_KAYITLAR = 'Kayitlar';
+    const TAB_DERNEKLER = 'Dernekler';
+    const TAB_IRK = 'IrkCinsRenk';
 
-    // Yardımcılar
+    // ====== Yardımcılar ======
     const $ = (s)=>document.querySelector(s);
     const $$ = (s)=>document.querySelectorAll(s);
+    const LS_KAYIT = 'yarisma_kayitlari_v6_cache';
+    const LS_VERI = 'irk_cins_renk_v6';
+    const LS_DERNEK = 'dernek_listesi_v6';
+    const cacheRead = (k,def)=>{ try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(def));}catch{return def;} };
+    const cacheWrite = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
+    const yaziliTarih = (iso)=>{ if(!iso) return '-'; const d = new Date(iso); return d.toLocaleString('tr-TR'); };
+    const csvUrl = (sheetName)=>`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheetName)}&tqx=out:csv`;
 
-    function okuJSON(key, def){
-      try{ return JSON.parse(localStorage.getItem(key)||JSON.stringify(def)); }catch{ return def; }
+    async function fetchCSV(sheetName){
+      const res = await fetch(csvUrl(sheetName), {cache:'no-store'});
+      if(!res.ok) throw new Error('CSV okunamadı: '+sheetName);
+      const txt = await res.text();
+      // Basit CSV ayrıştırma (virgül ayracı varsayımı)
+      return txt.split(/\r?\n/).filter(Boolean).map(line=>{
+        // Çift tırnak içindeki virgülleri korumak için kaba ayırma
+        const parts=[]; let cur=''; let inQ=false;
+        for(let i=0;i<line.length;i++){
+          const ch=line[i];
+          if(ch==='"'){ inQ=!inQ; }
+          else if(ch===',' && !inQ){ parts.push(cur); cur=''; continue; }
+          cur+=ch;
+        }
+        parts.push(cur);
+        return parts.map(s=>s.replace(/^"|"$/g,'').replace(/""/g,'"'));
+      });
     }
-    function yazJSON(key, val){ localStorage.setItem(key, JSON.stringify(val)); }
 
-    // Elemanlar
+    // ====== Elemanlar ======
     const tabs = $$('.tab');
     const secKayit = $('#kayit');
     const secOnay = $('#onay');
     const secAdmin = $('#admin');
 
     const adSoyad = $('#adSoyad');
+    const telefon = $('#telefon');
     const dernek = $('#dernek');
     const irk = $('#irk');
     const cins = $('#cins');
@@ -336,26 +343,16 @@
     const tblKayitlarBody = $('#tblKayitlar tbody');
     const btnCSV = $('#btnCSV');
     const btnXLSX = $('#btnXLSX');
-    const btnHepsiniSil = $('#btnHepsiniSil');
+    const btnCloudYenile = $('#btnCloudYenile');
 
-    const dropIrk = $('#dropIrk');
-    const fileIrk = $('#fileIrk');
     const tblVeriBody = $('#tblVeri tbody');
-    const btnVeriDisaJSON = $('#btnVeriDisaJSON');
-    const btnVeriDisaXLSX = $('#btnVeriDisaXLSX');
-    const btnVeriTemizle = $('#btnVeriTemizle');
-
-    const dropDernek = $('#dropDernek');
-    const fileDernek = $('#fileDernek');
     const tblDernekBody = $('#tblDernek tbody');
-    const btnDernekJSON = $('#btnDernekJSON');
-    const btnDernekTemizle = $('#btnDernekTemizle');
 
     // Tür ve K/T seçim durumları
     let secTur = '';
     let secTip = '';
 
-    // Tabs
+    // ====== Sekmeler ======
     tabs.forEach(t=>t.addEventListener('click',()=>{
       tabs.forEach(x=>x.classList.remove('active'));
       t.classList.add('active');
@@ -363,9 +360,7 @@
       document.getElementById(t.dataset.tab).classList.remove('hidden');
       if(t.dataset.tab==='onay') renderGecici();
       if(t.dataset.tab==='admin' && !adminIcerik.classList.contains('hidden')){
-        renderKayitlar();
-        renderVeriTablosu();
-        renderDernekTablosu();
+        renderKayitlar(); renderVeriTablosu(); renderDernekTablosu();
       }
     }));
 
@@ -380,289 +375,146 @@
     }));
 
     // Tür ve K/T butonları
-    $$('#turBtns button').forEach(b=>b.onclick=()=>{
-      $$('#turBtns button').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active'); secTur = b.dataset.tur;
-    });
-    $$('#kayitTipBtns button').forEach(b=>b.onclick=()=>{
-      $$('#kayitTipBtns button').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active'); secTip = b.dataset.tip;
-    });
+    $$('#turBtns button').forEach(b=>b.onclick=()=>{ $$('#turBtns button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); secTur=b.dataset.tur; });
+    $$('#kayitTipBtns button').forEach(b=>b.onclick=()=>{ $$('#kayitTipBtns button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); secTip=b.dataset.tip; });
+
+    // ====== Buluttan listeleri yükle ======
+    async function loadDernekler(){
+      try{
+        const rows = await fetchCSV(TAB_DERNEKLER);
+        const head = rows[0]||[];
+        // Dernek sütunu adı "Dernek" veya ilk sütun olabilir
+        const idx = head.findIndex(h=>h.trim().toLowerCase()==='dernek');
+        const list = rows.slice(1).map(r=> r[idx>-1?idx:0]).filter(Boolean);
+        const uniq = [...new Set(list.map(s=>String(s).trim()))];
+        cacheWrite(LS_DERNEK, {liste:uniq});
+        renderDernekSelect(); renderDernekTablosu();
+      }catch(e){ console.warn('Dernekler alınamadı:', e.message); }
+    }
+
+    async function loadIrkCinsRenk(){
+      try{
+        const rows = await fetchCSV(TAB_IRK);
+        const head = rows[0]||[];
+        const find = (name)=> head.findIndex(h=>h.trim().toLowerCase()===name);
+        const iIrk = find('irk');
+        const iCins = find('cins');
+        const iRenk = find('renk');
+        if(iIrk<0 || iCins<0 || iRenk<0) throw new Error('Başlıklar (Irk|Cins|Renk) bulunamadı');
+        const map = {};
+        rows.slice(1).forEach(r=>{
+          const I = String(r[iIrk]||'').trim();
+          const C = String(r[iCins]||'').trim();
+          const R = String(r[iRenk]||'').trim();
+          if(!I||!C||!R) return;
+          map[I] = map[I] || {};
+          map[I][C] = map[I][C] || [];
+          if(!map[I][C].includes(R)) map[I][C].push(R);
+        });
+        cacheWrite(LS_VERI, map);
+        renderIrkSelect(); renderVeriTablosu();
+      }catch(e){ console.warn('IrkCinsRenk alınamadı:', e.message); }
+    }
+
+    async function loadKayitlar(){
+      try{
+        const rows = await fetchCSV(TAB_KAYITLAR);
+        const head = rows[0]||[]; const idx=(k)=>head.findIndex(h=>h.trim().toLowerCase()===k);
+        const iAd=idx('ad soyad'), iTel=idx('telefon'), iDer=idx('dernek'), iTur=idx('tür')>-1?idx('tür'):idx('tur'), iKT=idx('k/t'), iIrk=idx('irk'), iCins=idx('cins'), iRenk=idx('renk'), iYil=idx('yıl')>-1?idx('yıl'):idx('yil'), iBil=idx('bilezik no'), iTime=idx('kaydedildi');
+        const list = rows.slice(1).map(r=>({ adSoyad:r[iAd]||'', telefon:r[iTel]||'', dernek:r[iDer]||'', tur:r[iTur]||'', tip:r[iKT]||'', irk:r[iIrk]||'', cins:r[iCins]||'', renk:r[iRenk]||'', yil:r[iYil]||'', bilezik:r[iBil]||'', kayitZamani:r[iTime]||'' }));
+        cacheWrite(LS_KAYIT, list); renderKayitlar();
+      }catch(e){ console.warn('Kayitlar alınamadı:', e.message); }
+    }
 
     // Açılırları doldur
-    function renderDernekSelect(){
-      const data = okuJSON(LS_DERNEK, {liste:[]});
-      dernek.innerHTML = '<option value="" disabled selected>Dernek Seçiniz...</option>';
-      data.liste.forEach(d=>{ const o=document.createElement('option'); o.value=d; o.textContent=d; dernek.appendChild(o); });
-    }
-    function renderIrkSelect(){
-      const data = okuJSON(LS_VERI, {});
-      irk.innerHTML = '<option value="" disabled selected>Seçiniz...</option>';
-      Object.keys(data).forEach(i=>{ const o=document.createElement('option');o.value=i;o.textContent=i;irk.appendChild(o); });
-      cins.innerHTML = '<option value="" disabled selected>Önce Irk seçiniz</option>';
-      renk.innerHTML = '<option value="" disabled selected>Önce Cins seçiniz</option>';
-    }
+    function renderDernekSelect(){ const data = cacheRead(LS_DERNEK,{liste:[]}); dernek.innerHTML='<option value="" disabled selected>Dernek Seçiniz...</option>'; data.liste.forEach(d=>{const o=document.createElement('option');o.value=d;o.textContent=d;dernek.appendChild(o);}); }
+    function renderIrkSelect(){ const data = cacheRead(LS_VERI,{}); irk.innerHTML='<option value="" disabled selected>Seçiniz...</option>'; Object.keys(data).forEach(i=>{const o=document.createElement('option');o.value=i;o.textContent=i;irk.appendChild(o);}); cins.innerHTML='<option value="" disabled selected>Önce Irk seçiniz</option>'; renk.innerHTML='<option value="" disabled selected>Önce Cins seçiniz</option>'; }
 
-    irk.addEventListener('change',()=>{
-      const data = okuJSON(LS_VERI, {});
-      const cinsler = Object.keys(data[irk.value]||{});
-      cins.innerHTML = '<option value="" disabled selected>Seçiniz...</option>';
-      cinsler.forEach(c=>{ const o=document.createElement('option');o.value=c;o.textContent=c;cins.appendChild(o); });
-      renk.innerHTML = '<option value="" disabled selected>Önce Cins seçiniz</option>';
-    });
+    irk.addEventListener('change',()=>{ const data=cacheRead(LS_VERI,{}); const cinsler=Object.keys(data[irk.value]||{}); cins.innerHTML='<option value="" disabled selected>Seçiniz...</option>'; cinsler.forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;cins.appendChild(o);}); renk.innerHTML='<option value="" disabled selected>Önce Cins seçiniz</option>'; });
+    cins.addEventListener('change',()=>{ const data=cacheRead(LS_VERI,{}); const renkler=(data[irk.value]||{})[cins.value]||[]; renk.innerHTML='<option value="" disabled selected>Seçiniz...</option>'; renkler.forEach(r=>{const o=document.createElement('option');o.value=r;o.textContent=r;renk.appendChild(o);}); });
 
-    cins.addEventListener('change',()=>{
-      const data = okuJSON(LS_VERI, {});
-      const renkler = (data[irk.value]||{})[cins.value]||[];
-      renk.innerHTML = '<option value="" disabled selected>Seçiniz...</option>';
-      renkler.forEach(r=>{ const o=document.createElement('option');o.value=r;o.textContent=r;renk.appendChild(o); });
-    });
+    // Bilezik TR kontrolü (TEKRAR TANIM YOK — global değişken kullanılıyor)
+    bilezik.addEventListener('input',()=>{ if(!bilezik.value.toUpperCase().startsWith('TR')){ bilezik.value=('TR'+bilezik.value.replace(/^TR/i,'')); } bilezik.value=bilezik.value.toUpperCase().replace(/\s+/g,''); });
 
-    // Bilezik TR kontrolü
-    bilezik.addEventListener('input',()=>{
-      if(!bilezik.value.toUpperCase().startsWith('TR')){
-        bilezik.value = ('TR' + bilezik.value.replace(/^TR/i,''));
-      }
-      bilezik.value = bilezik.value.toUpperCase().replace(/\s+/g,'');
-    });
-
-    // Geçici liste bellek içinde
+    // Geçici liste
     const gecici = [];
+    $('#btnBosalt').addEventListener('click',()=>{ if(gecici.length===0) return; if(confirm('Geçici liste silinsin mi?')){ gecici.length=0; renderGecici(); onayKutusu.checked=false; }});
 
-    // Ekle butonu
+    // Listeye ekle (TEKRAR TANIM YOK — global btnEkle kullanılıyor)
     btnEkle.addEventListener('click',()=>{
       if(!adSoyad.value.trim()) return alert('Ad Soyad gerekli');
+      if(!telefon.value.match(/^[0-9]{10,15}$/)) return alert('Telefon 10-15 haneli rakamlardan oluşmalıdır');
       if(!dernek.value) return alert('Dernek seçiniz');
       if(!secTur) return alert('Hayvan türü seçiniz');
       if(!secTip) return alert('K/T seçiniz');
       if(!irk.value||!cins.value||!renk.value) return alert('Irk/Cins/Renk seçiniz');
       if(!yil.value) return alert('Yıl gerekli');
       if(!bilezik.value.toUpperCase().startsWith('TR')) return alert('Bilezik TR ile başlamalıdır');
-
-      const kayit = {
-        adSoyad: adSoyad.value.trim(),
-        dernek: dernek.value,
-        tur: secTur,
-        tip: secTip,
-        irk: irk.value,
-        cins: cins.value,
-        renk: renk.value,
-        yil: yil.value,
-        bilezik: bilezik.value.toUpperCase(),
-      };
-      gecici.push(kayit);
-      // formu temizle ama tür/tip seçimini korumayabiliriz
-      $('#formHayvan').reset();
-      $$('#turBtns button').forEach(x=>x.classList.remove('active')); secTur='';
-      $$('#kayitTipBtns button').forEach(x=>x.classList.remove('active')); secTip='';
-      renderIrkSelect();
-      // Onay sekmesine geç
-      document.querySelector('[data-tab="onay"]').click();
+      const k={ adSoyad:adSoyad.value.trim(), telefon:telefon.value.trim(), dernek:dernek.value, tur:secTur, tip:secTip, irk:irk.value, cins:cins.value, renk:renk.value, yil:yil.value, bilezik:bilezik.value.toUpperCase() };
+      gecici.push(k);
+      document.getElementById('formHayvan').reset(); $$('#turBtns button').forEach(x=>x.classList.remove('active')); $$('#kayitTipBtns button').forEach(x=>x.classList.remove('active')); secTur=''; secTip=''; renderIrkSelect(); document.querySelector('[data-tab="onay"]').click();
     });
 
-    // Gecici tablo render
     function renderGecici(){
-      tblGeciciBody.innerHTML='';
-      if(gecici.length===0){
-        listeBos.classList.remove('hidden');
-        listeAlani.classList.add('hidden');
-        return;
-      }
-      listeBos.classList.add('hidden');
-      listeAlani.classList.remove('hidden');
-      gecici.forEach((k,idx)=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `
-          <td>${idx+1}</td>
-          <td>${k.adSoyad}</td>
-          <td>${k.dernek}</td>
-          <td>${k.tur}</td>
-          <td>${k.tip}</td>
-          <td>${k.irk}</td>
-          <td>${k.cins}</td>
-          <td>${k.renk}</td>
-          <td>${k.yil}</td>
-          <td>${k.bilezik}</td>
-          <td><button class="danger" data-sil="${idx}">Sil</button></td>`;
-        tblGeciciBody.appendChild(tr);
-      });
+      const body = tblGeciciBody; body.innerHTML='';
+      if(!gecici.length){ listeBos.classList.remove('hidden'); listeAlani.classList.add('hidden'); return; }
+      listeBos.classList.add('hidden'); listeAlani.classList.remove('hidden');
+      gecici.forEach((k,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td>${k.adSoyad}</td><td>${k.telefon}</td><td>${k.dernek}</td><td>${k.tur}</td><td>${k.tip}</td><td>${k.irk}</td><td>${k.cins}</td><td>${k.renk}</td><td>${k.yil}</td><td>${k.bilezik}</td><td><button class='danger' data-sil='${i}'>Sil</button></td>`; body.appendChild(tr); });
     }
+    document.getElementById('tblGecici').addEventListener('click',(e)=>{ const b=e.target.closest('button[data-sil]'); if(!b) return; const i=+b.dataset.sil; gecici.splice(i,1); renderGecici(); });
 
-    $('#tblGecici').addEventListener('click',(e)=>{
-      const btn = e.target.closest('button[data-sil]');
-      if(!btn) return;
-      const i = +btn.dataset.sil; gecici.splice(i,1); renderGecici();
-    });
-
-    // Kalıcı kayıt işlemleri
-    function okuKayitlar(){ return okuJSON(LS_KAYIT, []); }
-    function yazKayitlar(l){ yazJSON(LS_KAYIT, l); }
-
-    btnOnay.addEventListener('click',()=>{
-      if(gecici.length===0) return alert('Liste boş.');
+    // Buluta kaydet
+    document.getElementById('btnOnay').addEventListener('click', async ()=>{
+      if(!gecici.length) return alert('Liste boş.');
       if(!onayKutusu.checked) return alert('Onay kutusunu işaretleyiniz.');
-      const simdi = new Date().toISOString();
-      const kalici = okuKayitlar();
-      gecici.forEach(k=>kalici.push({...k, kayitZamani: simdi}));
-      yazKayitlar(kalici);
-      gecici.length=0; renderGecici(); onayKutusu.checked=false;
-      alert('Kayıtlar kaydedildi. Admin bölümünden görüntüleyebilirsiniz.');
-    });
-
-    btnBosalt.addEventListener('click',()=>{
-      if(gecici.length===0) return;
-      if(confirm('Geçici listeyi tamamen silmek istiyor musunuz?')){ gecici.length=0; renderGecici(); onayKutusu.checked=false; }
+      try{
+        for(const k of gecici){
+          const payload = { adSoyad:k.adSoyad, telefon:k.telefon, dernek:k.dernek, tur:k.tur, tip:k.tip, irk:k.irk, cins:k.cins, renk:k.renk, yil:k.yil, bilezik:k.bilezik };
+          const res = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
+          if(!res.ok) throw new Error('Ağ hatası');
+          const txt = await res.text(); if(!/OK/i.test(txt)) console.warn('Beklenmeyen yanıt:', txt);
+        }
+        gecici.length=0; renderGecici(); onayKutusu.checked=false; alert('Kayıtlar buluta kaydedildi.');
+        await loadKayitlar();
+      }catch(err){ console.error(err); alert('Kaydetme sırasında bir hata oluştu. İnternet bağlantınızı ve "Dağıtım" ayarlarını kontrol edin.'); }
     });
 
     // Admin giriş
-    btnAdminGiris.addEventListener('click',()=>{
-      if(adminPwd.value!=='admin') return alert('Hatalı şifre. Varsayılan: admin');
-      adminIcerik.classList.remove('hidden'); btnAdminCikis.classList.remove('hidden');
-      renderKayitlar(); renderVeriTablosu(); renderDernekTablosu();
-    });
-    btnAdminCikis.addEventListener('click',()=>{
-      adminIcerik.classList.add('hidden'); btnAdminCikis.classList.add('hidden'); adminPwd.value='';
-    });
+    btnAdminGiris.addEventListener('click',()=>{ if(adminPwd.value!=='admin') return alert('Hatalı şifre. Varsayılan: admin'); adminIcerik.classList.remove('hidden'); btnAdminCikis.classList.remove('hidden'); renderKayitlar(); renderVeriTablosu(); renderDernekTablosu(); });
+    btnAdminCikis.addEventListener('click',()=>{ adminIcerik.classList.add('hidden'); btnAdminCikis.classList.add('hidden'); adminPwd.value=''; });
 
-    function yaziliTarih(iso){ if(!iso) return '-'; const d = new Date(iso); return d.toLocaleString('tr-TR'); }
+    // Admin: tabloyu cache'den göster
+    function renderKayitlar(){ const data = cacheRead(LS_KAYIT, []); tblKayitlarBody.innerHTML=''; data.forEach((k,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td>${k.adSoyad}</td><td>${k.telefon}</td><td>${k.dernek}</td><td>${k.tur}</td><td>${k.tip}</td><td>${k.irk}</td><td>${k.cins}</td><td>${k.renk}</td><td>${k.yil}</td><td>${k.bilezik}</td><td>${yaziliTarih(k.kayitZamani)}</td>`; tblKayitlarBody.appendChild(tr); }); }
 
-    function renderKayitlar(){
-      const data = okuKayitlar();
-      tblKayitlarBody.innerHTML='';
-      data.forEach((k,idx)=>{
-        const tr=document.createElement('tr');
-        tr.innerHTML = `
-          <td>${idx+1}</td>
-          <td>${k.adSoyad}</td>
-          <td>${k.dernek}</td>
-          <td>${k.tur}</td>
-          <td>${k.tip}</td>
-          <td>${k.irk}</td>
-          <td>${k.cins}</td>
-          <td>${k.renk}</td>
-          <td>${k.yil}</td>
-          <td>${k.bilezik}</td>
-          <td>${yaziliTarih(k.kayitZamani)}</td>`;
-        tblKayitlarBody.appendChild(tr);
-      });
+    // Buluttan yenile (tüm sekmeler)
+    btnCloudYenile.addEventListener('click', async ()=>{ await Promise.all([loadKayitlar(), loadDernekler(), loadIrkCinsRenk()]); alert('Buluttan yenilendi.'); });
+
+    // Tablolar: Irk–Cins–Renk ve Dernekler
+    function renderVeriTablosu(){ const data=cacheRead(LS_VERI,{}); const rows=[]; Object.keys(data).forEach(i=>{Object.keys(data[i]||{}).forEach(c=>{const rs=data[i][c]||[]; if(!rs.length) rows.push([i,c,'-']); else rs.forEach(r=>rows.push([i,c,r]));});}); tblVeriBody.innerHTML=''; if(!rows.length){ const tr=document.createElement('tr'); tr.innerHTML='<td colspan="3">Buluttan veri yükleyin (IrkCinsRenk sekmesi).</td>'; tblVeriBody.appendChild(tr); return;} rows.forEach(([i,c,r])=>{const tr=document.createElement('tr'); tr.innerHTML=`<td>${i}</td><td>${c}</td><td>${r}</td>`; tblVeriBody.appendChild(tr);}); }
+    function renderDernekTablosu(){ const data=cacheRead(LS_DERNEK,{liste:[]}); tblDernekBody.innerHTML=''; if(!data.liste.length){ const tr=document.createElement('tr'); tr.innerHTML='<td colspan="2">Buluttan veri yükleyin (Dernekler sekmesi).</td>'; tblDernekBody.appendChild(tr); return;} data.liste.forEach((d,i)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i+1}</td><td>${d}</td>`; tblDernekBody.appendChild(tr); }); }
+
+    // ==== Basit Otomatik Testler (konsola yazar) ====
+    function runSelfTests(){
+      try{
+        console.group('[TEST] v6 self-check');
+        console.assert(bilezik && typeof bilezik === 'object', 'bilezik alanı bulunmalı');
+        const prev = bilezik.value;
+        bilezik.value = '12345';
+        bilezik.dispatchEvent(new Event('input'));
+        console.assert(/^TR/i.test(bilezik.value), 'Bilezik TR ile başlamalı');
+        bilezik.value = prev; // geri al
+
+        console.assert(btnEkle && typeof btnEkle === 'object', 'btnEkle bulunmalı');
+        console.assert(/^[0-9]{10,15}$/.test('5551234567'), 'Telefon regex örnek testi (5551234567)');
+        console.groupEnd();
+      }catch(e){ console.error('Self-tests hata:', e); }
     }
 
-    // İndirme: CSV
-    btnCSV.addEventListener('click',()=>{
-      const data = okuKayitlar(); if(!data.length) return alert('Kayıt yok.');
-      const baslik = ['Ad Soyad','Dernek','Tür','K/T','Irk','Cins','Renk','Yıl','Bilezik No','Kaydedildi'];
-      const satirlar = data.map(k=>[k.adSoyad,k.dernek,k.tur,k.tip,k.irk,k.cins,k.renk,k.yil,k.bilezik,yaziliTarih(k.kayitZamani)]);
-      const csv = [baslik, ...satirlar].map(r=>r.map(k=>`"${String(k).replaceAll('"','""')}"`).join(';')).join('\n');
-      const blob = new Blob(["\ufeff"+csv], {type:'text/csv;charset=utf-8;'});
-      const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='yarisma_kayitlari.csv'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
-
-    // İndirme: XLSX
-    btnXLSX.addEventListener('click',()=>{
-      const data = okuKayitlar(); if(!data.length) return alert('Kayıt yok.');
-      const rows = [['Ad Soyad','Dernek','Tür','K/T','Irk','Cins','Renk','Yıl','Bilezik No','Kaydedildi']];
-      data.forEach(k=>rows.push([k.adSoyad,k.dernek,k.tur,k.tip,k.irk,k.cins,k.renk,k.yil,k.bilezik,yaziliTarih(k.kayitZamani)]));
-      const ws = XLSX.utils.aoa_to_sheet(rows); const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, 'Kayitlar'); XLSX.writeFile(wb, 'yarisma_kayitlari.xlsx');
-    });
-
-    btnHepsiniSil.addEventListener('click',()=>{
-      if(confirm('Tüm kayıtları silmek istediğinize emin misiniz?')){ localStorage.removeItem(LS_KAYIT); renderKayitlar(); alert('Tüm kayıtlar silindi.'); }
-    });
-
-    // --- Irk–Cins–Renk Yönetimi ---
-    function renderVeriTablosu(){
-      const data = okuJSON(LS_VERI, {});
-      const rows = [];
-      Object.keys(data).forEach(i=>{ Object.keys(data[i]||{}).forEach(c=>{ const rs = data[i][c]||[]; if(!rs.length) rows.push([i,c,'-']); else rs.forEach(r=>rows.push([i,c,r])); }); });
-      tblVeriBody.innerHTML='';
-      if(rows.length===0){ const tr=document.createElement('tr'); tr.innerHTML='<td colspan="4">Henüz veri yok. Excel yükleyin.</td>'; tblVeriBody.appendChild(tr); return; }
-      rows.forEach(([i,c,r])=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${i}</td><td>${c}</td><td>${r}</td><td><button class="danger" data-sil="${encodeURIComponent([i,c,r].join('|'))}">Sil</button></td>`; tblVeriBody.appendChild(tr); });
-    }
-
-    $('#tblVeri').addEventListener('click',(e)=>{
-      const btn = e.target.closest('button[data-sil]'); if(!btn) return;
-      const [i,c,r] = decodeURIComponent(btn.dataset.sil).split('|');
-      const data = okuJSON(LS_VERI, {});
-      if(!data[i]||!data[i][c]) return;
-      if(r==='-'){ delete data[i][c]; if(Object.keys(data[i]).length===0) delete data[i]; }
-      else{ data[i][c] = (data[i][c]||[]).filter(x=>x!==r); if(data[i][c].length===0) delete data[i][c]; if(Object.keys(data[i]).length===0) delete data[i]; }
-      yazJSON(LS_VERI, data); renderVeriTablosu(); renderIrkSelect();
-    });
-
-    function setupDrop(el, input){
-      ['dragenter','dragover'].forEach(ev=>el.addEventListener(ev,(e)=>{ e.preventDefault(); e.stopPropagation(); el.classList.add('drag'); }));
-      ['dragleave','drop'].forEach(ev=>el.addEventListener(ev,(e)=>{ e.preventDefault(); e.stopPropagation(); el.classList.remove('drag'); }));
-      el.addEventListener('click',()=> input.click());
-    }
-    setupDrop(dropIrk, fileIrk); setupDrop(dropDernek, fileDernek);
-
-    function parseIrkFile(file){
-      const reader = new FileReader(); reader.onload = (e)=>{
-        try{
-          const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-          const ws = wb.Sheets[wb.SheetNames[0]]; const rows = XLSX.utils.sheet_to_json(ws, {defval:''});
-          const map = {};
-          rows.forEach(r=>{ const i=r.Irk||r.irk; const c=r.Cins||r.cins; const re=r.Renk||r.renk; if(!i||!c||!re) return; map[i]=map[i]||{}; map[i][c]=map[i][c]||[]; if(!map[i][c].includes(re)) map[i][c].push(re); });
-          yazJSON(LS_VERI, map); renderVeriTablosu(); renderIrkSelect(); alert('Irk–Cins–Renk listesi yüklendi');
-        }catch(err){ console.error(err); alert('Excel okunurken bir hata oluştu.'); }
-      }; reader.readAsArrayBuffer(file);
-    }
-
-    function parseDernekFile(file){
-      const reader = new FileReader(); reader.onload = (e)=>{
-        try{
-          const wb = XLSX.read(new Uint8Array(e.target.result), {type:'array'});
-          const ws = wb.Sheets[wb.SheetNames[0]]; const rows = XLSX.utils.sheet_to_json(ws, {defval:''});
-          const col = Object.keys(rows[0]||{}).find(k=>k.toLowerCase().includes('dernek'));
-          if(!col) return alert('Sütun adı Dernek olmalı');
-          const liste = [...new Set(rows.map(r=>String(r[col]).trim()).filter(Boolean))];
-          yazJSON(LS_DERNEK, {liste}); renderDernekSelect(); renderDernekTablosu(); alert('Dernek listesi yüklendi');
-        }catch(err){ console.error(err); alert('Excel okunurken bir hata oluştu.'); }
-      }; reader.readAsArrayBuffer(file);
-    }
-
-    dropIrk.addEventListener('drop',(e)=>{ const f=e.dataTransfer.files[0]; if(f) parseIrkFile(f); });
-    fileIrk.addEventListener('change',()=>{ if(fileIrk.files[0]) parseIrkFile(fileIrk.files[0]); });
-
-    dropDernek.addEventListener('drop',(e)=>{ const f=e.dataTransfer.files[0]; if(f) parseDernekFile(f); });
-    fileDernek.addEventListener('change',()=>{ if(fileDernek.files[0]) parseDernekFile(fileDernek.files[0]); });
-
-    // Dışa aktarma – veri
-    btnVeriDisaJSON.addEventListener('click',()=>{
-      const data = okuJSON(LS_VERI, {}); const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='irk_cins_renk.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
-    btnVeriDisaXLSX.addEventListener('click',()=>{
-      const data = okuJSON(LS_VERI, {}); const rows = [['Irk','Cins','Renk']];
-      Object.keys(data).forEach(i=>{ Object.keys(data[i]||{}).forEach(c=>{ const rs=data[i][c]||[]; if(!rs.length) rows.push([i,c,'']); else rs.forEach(r=>rows.push([i,c,r])); }); });
-      const ws = XLSX.utils.aoa_to_sheet(rows); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, 'IrkCinsRenk'); XLSX.writeFile(wb, 'irk_cins_renk.xlsx');
-    });
-    btnVeriTemizle.addEventListener('click',()=>{ if(confirm('Irk–Cins–Renk listesini tamamen silmek istiyor musunuz?')){ localStorage.removeItem(LS_VERI); renderVeriTablosu(); renderIrkSelect(); }});
-
-    // Dernek tablo ve işlemler
-    function renderDernekTablosu(){
-      const data = okuJSON(LS_DERNEK, {liste:[]});
-      tblDernekBody.innerHTML='';
-      if(!data.liste.length){ const tr=document.createElement('tr'); tr.innerHTML='<td colspan="3">Henüz dernek yok. Excel yükleyin.</td>'; tblDernekBody.appendChild(tr); return; }
-      data.liste.forEach((d,idx)=>{ const tr=document.createElement('tr'); tr.innerHTML=`<td>${idx+1}</td><td>${d}</td><td><button class=\"danger\" data-sil=\"${encodeURIComponent(d)}\">Sil</button></td>`; tblDernekBody.appendChild(tr); });
-    }
-
-    $('#tblDernek').addEventListener('click',(e)=>{
-      const btn = e.target.closest('button[data-sil]'); if(!btn) return; const sil=decodeURIComponent(btn.dataset.sil);
-      const data = okuJSON(LS_DERNEK, {liste:[]}); data.liste = (data.liste||[]).filter(x=>x!==sil); yazJSON(LS_DERNEK, data); renderDernekTablosu(); renderDernekSelect();
-    });
-
-    btnDernekJSON.addEventListener('click',()=>{
-      const data = okuJSON(LS_DERNEK, {liste:[]}); const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
-      const url = URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download='dernek_listesi.json'; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-    });
-    btnDernekTemizle.addEventListener('click',()=>{ if(confirm('Tüm dernekleri silmek istiyor musunuz?')){ localStorage.removeItem(LS_DERNEK); renderDernekTablosu(); renderDernekSelect(); }});
-
-    // İlk yükleme
-    window.addEventListener('DOMContentLoaded',()=>{
-      renderDernekSelect();
-      renderIrkSelect();
+    // İlk yükleme: buluttan verileri getir + önbelleğe yaz + self tests
+    window.addEventListener('DOMContentLoaded', async ()=>{
+      renderDernekSelect(); renderIrkSelect(); // önce cache'dekini yükle (boş olabilir)
+      await Promise.all([loadDernekler(), loadIrkCinsRenk(), loadKayitlar()]);
+      runSelfTests();
     });
   </script>
 </body>
