@@ -3,140 +3,171 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yarışma Hayvan Kayıt Sistemi v14.2</title>
+  <title>Yarışma Hayvan Kayıt Sistemi v14.4</title>
   <style>
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(180deg, #cce5ff, #e0f2ff); color:#002b5c; margin:0; padding:0; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(180deg,#cce5ff,#e0f2ff); color:#002b5c; margin:0; padding:0; }
     header { background:#0077cc; color:white; text-align:center; padding:15px 0; font-size:22px; font-weight:bold; box-shadow:0 2px 10px rgba(0,0,0,0.2); }
     .container { max-width:950px; margin:20px auto; padding:20px; }
     .nav { display:flex; justify-content:center; gap:10px; margin-bottom:20px; flex-wrap:wrap; }
-    .tab { background:transparent; color:#004c99; border:2px solid #0077cc; border-radius:10px; padding:10px 16px; cursor:pointer; transition:0.3s; }
+    .tab { background:transparent; color:#004c99; border:2px solid #0077cc; border-radius:10px; padding:10px 16px; cursor:pointer; transition:.3s; }
     .tab.active { background:#0077cc; color:white; }
-    .card { background:rgba(255,255,255,0.7); backdrop-filter:blur(10px); border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.2); padding:20px; margin-bottom:25px; display:none; }
+    .card { background:rgba(255,255,255,.7); backdrop-filter:blur(10px); border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,.2); padding:20px; margin-bottom:25px; display:none; }
     .card.active { display:block; }
-    input, select { width:100%; padding:10px; border-radius:8px; border:1px solid #b3d7ff; background:rgba(255,255,255,0.8); color:#002b5c; margin-top:5px; }
-    button { background:#0077cc; border:none; padding:12px 20px; border-radius:10px; color:white; cursor:pointer; font-size:16px; transition:0.3s; }
+    input,select { width:100%; padding:10px; border-radius:8px; border:1px solid #b3d7ff; background:rgba(255,255,255,.85); color:#002b5c; margin-top:5px; }
+    button { background:#0077cc; border:none; padding:12px 20px; border-radius:10px; color:white; cursor:pointer; font-size:16px; transition:.3s; }
     button:hover { background:#005fa3; }
     .success { background:#d1f7d1; color:#004d00; border:1px solid #66cc66; padding:10px; border-radius:8px; margin-top:12px; display:none; text-align:center; }
     .loading { background:#e6f3ff; color:#003366; padding:10px; border-radius:8px; margin-bottom:10px; display:none; text-align:center; font-weight:bold; }
     .table { width:100%; border-collapse:collapse; }
-    .table th, .table td { border-bottom:1px solid #cce5ff; padding:10px; text-align:left; }
+    .table th,.table td { border-bottom:1px solid #cce5ff; padding:10px; text-align:left; }
     .table th { background:#e6f3ff; color:#003366; }
-    .modal { display:none; position:fixed; z-index:10; left:0; top:0; width:100%; height:100%; background:rgba(0,0,0,0.4); backdrop-filter:blur(4px); justify-content:center; align-items:center; }
-    .modal-content { background:rgba(255,255,255,0.95); padding:30px; border-radius:12px; width:90%; max-width:400px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.3); }
+    .modal { display:none; position:fixed; z-index:10; inset:0; background:rgba(0,0,0,.4); backdrop-filter:blur(4px); justify-content:center; align-items:center; }
+    .modal-content { background:rgba(255,255,255,.95); padding:30px; border-radius:12px; width:90%; max-width:400px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,.3); }
     .error { color:red; font-size:14px; margin-top:5px; display:none; }
   </style>
   <script>
-    https://script.google.com/macros/s/AKfycbx4_oyxxGQoG_9GLMMd00g0R08PVFdZK_m-QCR6Gn0dfmIlKNfJV5DGZKtaAuCP4D8Q0g/exec
     const SHEET_ID = "19qwcNoLZp9Pe1qiDrBo0Ptp_t23SSDpwjuVxybiNggQ";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx4_oyxxGQoG_9GLMMd00g0R08PVFdZK_m-QCR6Gn0dfmIlKNfJV5DGZKtaAuCP4D8Q0g/exec";
     const ADMIN_PASS = "Ahms02450**";
 
-    function openTab(tab){
-      document.querySelectorAll('.card').forEach(c=>c.classList.remove('active'));
-      document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    function openTab(tab) {
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.getElementById(tab).classList.add('active');
-      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
+      document.querySelector(`[data-tab="{tab}"]`.replace("{tab}", tab)).classList.add('active');
     }
 
-    async function getSheetData(sheet){
-      try{
-        const res=await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${sheet}`);
-        const text=await res.text();
-        return text.split('\n').slice(1).map(r=>r.split(','));
-      }catch(err){ console.error('Veri alınamadı',err); return []; }
+    // --- Google Sheets'ten JSON (GViz) ile veri çek ---
+    async function fetchGviz(sheet, columns = "*", retries = 3) {
+      const tq = encodeURIComponent("select " + columns);
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheet)}&tq=${tq}`;
+      for (let i=0;i<retries;i++) {
+        try {
+          const res = await fetch(url, { cache: 'no-store' });
+          const text = await res.text();
+          const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}')+1));
+          const rows = (json.table.rows || []).map(r => (r.c || []).map(c => (c && (c.v ?? ''))));
+          return rows;
+        } catch (e) {
+          if (i === retries-1) throw e;
+          await new Promise(r => setTimeout(r, 600)); // küçük bekleme ve yeniden dene
+        }
+      }
     }
 
-    async function loadLists(){
-      const loading=document.getElementById('loadingMsg');
-      loading.style.display='block';
-      await new Promise(r=>setTimeout(r,1000));
-      try{
-        const dernekSel=document.getElementById('dernekSelect');
-        const irkSel=document.getElementById('irkSelect');
-        const cinsSel=document.getElementById('cinsSelect');
-        const renkSel=document.getElementById('renkSelect');
-        const dernekler=await getSheetData('Dernekler');
-        dernekler.forEach(d=>{ if(d[0]) dernekSel.innerHTML+=`<option>${d[0]}</option>`; });
-        const icr=await getSheetData('IrkCinsRenk');
-        const irklar=[...new Set(icr.map(r=>r[0]).filter(Boolean))];
-        irklar.forEach(i=>irkSel.innerHTML+=`<option>${i}</option>`);
-        irkSel.addEventListener('change',()=>{
-          cinsSel.innerHTML='<option value="">Cins seçin</option>';
-          renkSel.innerHTML='<option value="">Renk seçin</option>';
-          icr.filter(r=>r[0]===irkSel.value).forEach(r=>{ if(r[1]) cinsSel.innerHTML+=`<option>${r[1]}</option>`; });
+    async function loadLists() {
+      const loading = document.getElementById('loadingMsg');
+      loading.style.display = 'block';
+      try {
+        const dernekSel = document.getElementById('dernekSelect');
+        const irkSel = document.getElementById('irkSelect');
+        const cinsSel = document.getElementById('cinsSelect');
+        const renkSel = document.getElementById('renkSelect');
+
+        // Dernekler (tek sütun)
+        const dernekRows = await fetchGviz('Dernekler', 'A');
+        const dernekler = [...new Set(dernekRows.map(r => (r[0]||'').toString().trim()).filter(Boolean))];
+        dernekler.forEach(d => dernekSel.innerHTML += `<option>${d}</option>`);
+
+        // Irk-Cins-Renk (3 sütun)
+        const icr = await fetchGviz('IrkCinsRenk', 'A,B,C');
+
+        // Irkları doldur
+        const irklar = [...new Set(icr.map(r => r[0]).filter(Boolean))];
+        irklar.forEach(i => irkSel.innerHTML += `<option>${i}</option>`);
+
+        irkSel.addEventListener('change', () => {
+          cinsSel.innerHTML = '<option value="">Cins seçin</option>';
+          renkSel.innerHTML = '<option value="">Renk seçin</option>';
+          const uniqueCins = [...new Set(icr.filter(r => r[0] === irkSel.value).map(r => r[1]).filter(Boolean))];
+          uniqueCins.forEach(c => cinsSel.innerHTML += `<option>${c}</option>`);
         });
-        cinsSel.addEventListener('change',()=>{
-          renkSel.innerHTML='<option value="">Renk seçin</option>';
-          icr.filter(r=>r[1]===cinsSel.value).forEach(r=>{ if(r[2]) renkSel.innerHTML+=`<option>${r[2]}</option>`; });
+
+        cinsSel.addEventListener('change', () => {
+          renkSel.innerHTML = '<option value="">Renk seçin</option>';
+          const uniqueRenk = [...new Set(icr.filter(r => r[1] === cinsSel.value).map(r => r[2]).filter(Boolean))];
+          uniqueRenk.forEach(r => renkSel.innerHTML += `<option>${r}</option>`);
         });
-        loading.style.display='none';
-      }catch(err){ alert('Listeler yüklenemedi: '+err.message); loading.style.display='none'; }
+
+      } catch (err) {
+        alert('Listeler yüklenemedi: ' + err.message);
+      } finally {
+        loading.style.display = 'none';
+      }
     }
 
-    async function kaydet(){
-      const adSoyad=adSoyadInput.value.trim();
-      const telefon=telefonInput.value.trim();
-      const dernek=dernekSelect.value.trim();
-      const tur=turSelect.value.trim();
-      const tip=tipSelect.value.trim();
-      const irk=irkSelect.value.trim();
-      const cins=cinsSelect.value.trim();
-      const renk=renkSelect.value.trim();
-      const yil=yilInput.value.trim();
-      const bilezik=bilezikInput.value.trim();
-      if(!adSoyad||!telefon||!dernek||!bilezik){ alert('⚠️ Zorunlu alanları doldurun.'); return; }
-      const payload={adSoyad,telefon,dernek,tur,tip,irk,cins,renk,yil,bilezik};
-      try{
-        const res=await fetch(APPS_SCRIPT_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
-        const text=await res.text();
-        if(/OK/i.test(text)){
+    async function kaydet() {
+      const adSoyad = adSoyadInput.value.trim();
+      const telefon = telefonInput.value.trim();
+      const dernek = dernekSelect.value.trim();
+      const tur = turSelect.value.trim();
+      const tip = tipSelect.value.trim();
+      const irk = irkSelect.value.trim();
+      const cins = cinsSelect.value.trim();
+      const renk = renkSelect.value.trim();
+      const yil = yilInput.value.trim();
+      const bilezik = bilezikInput.value.trim();
+      if (!adSoyad || !telefon || !dernek || !bilezik) { alert('⚠️ Zorunlu alanları doldurun.'); return; }
+      const payload = { adSoyad, telefon, dernek, tur, tip, irk, cins, renk, yil, bilezik };
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        const text = await res.text();
+        if (/OK/i.test(text)) {
           document.getElementById('form').reset();
-          document.getElementById('successMsg').style.display='block';
-          setTimeout(()=>document.getElementById('successMsg').style.display='none',2500);
+          document.getElementById('successMsg').style.display = 'block';
+          setTimeout(() => document.getElementById('successMsg').style.display = 'none', 2500);
           addToList(payload);
-        }else alert('Beklenmeyen yanıt: '+text);
-      }catch(err){ alert('Kaydetme hatası: '+err.message); }
+        } else {
+          alert('Beklenmeyen yanıt: ' + text);
+        }
+      } catch (err) {
+        alert('Kaydetme hatası: ' + err.message);
+      }
     }
 
-    function addToList(row){
-      const tbody=document.querySelector('#listeTable tbody');
-      const tr=document.createElement('tr');
-      tr.innerHTML=`<td>${tbody.children.length+1}</td><td>${row.adSoyad}</td><td>${row.telefon}</td><td>${row.dernek}</td><td>${row.tur}</td><td>${row.irk}</td><td>${row.cins}</td><td>${row.renk}</td><td>${row.bilezik}</td>`;
+    function addToList(row) {
+      const tbody = document.querySelector('#listeTable tbody');
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${tbody.children.length+1}</td><td>${row.adSoyad}</td><td>${row.telefon}</td><td>${row.dernek}</td><td>${row.tur}</td><td>${row.irk}</td><td>${row.cins}</td><td>${row.renk}</td><td>${row.bilezik}</td>`;
       tbody.appendChild(tr);
     }
 
-    function showAdminModal(){ document.getElementById('adminModal').style.display='flex'; }
-    function closeModal(){ document.getElementById('adminModal').style.display='none'; document.getElementById('adminPass').value=''; document.getElementById('errorMsg').style.display='none'; }
-    function checkAdmin(){
-      const val=document.getElementById('adminPass').value;
-      if(val===ADMIN_PASS){ closeModal(); openTab('adminCard'); yukleKayitlar(); }
-      else document.getElementById('errorMsg').style.display='block';
+    function showAdminModal() { document.getElementById('adminModal').style.display='flex'; }
+    function closeModal() { document.getElementById('adminModal').style.display='none'; adminPass.value=''; errorMsg.style.display='none'; }
+    function checkAdmin() {
+      if (adminPass.value === ADMIN_PASS) { closeModal(); openTab('adminCard'); yukleKayitlar(); }
+      else errorMsg.style.display='block';
     }
 
-    async function yukleKayitlar(){
-      try{
-        const res=await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Kayitlar`);
-        const text=await res.text();
-        const rows=text.split('\n').map(r=>r.split(','));
-        const tbody=document.querySelector('#adminTable tbody');
+    async function yukleKayitlar() {
+      try {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Kayitlar`);
+        const text = await res.text();
+        const rows = text.split('\n').map(r=>r.split(','));
+        const tbody = document.querySelector('#adminTable tbody');
         tbody.innerHTML='';
-        rows.slice(1).forEach((r,i)=>{ if(r[0]) tbody.innerHTML+=`<tr><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[9]}</td></tr>`; });
-      }catch(err){ alert('Kayıtlar alınamadı: '+err.message); }
+        rows.slice(1).forEach((r,i)=>{ if(r[0]) tbody.innerHTML += `<tr><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[9]}</td></tr>`; });
+      } catch (err) { alert('Kayıtlar alınamadı: ' + err.message); }
     }
 
-    function exportTableToExcel(id,filename='kayitlar.xlsx'){
-      const table=document.getElementById(id);
-      const html=table.outerHTML.replace(/ /g,'%20');
-      const link=document.createElement('a');
-      link.href='data:application/vnd.ms-excel,'+html;
-      link.download=filename;
+    function exportTableToExcel(id, filename='kayitlar.xlsx') {
+      const table = document.getElementById(id);
+      const html = table.outerHTML.replace(/ /g, '%20');
+      const link = document.createElement('a');
+      link.href = 'data:application/vnd.ms-excel,' + html;
+      link.download = filename;
       link.click();
     }
 
-    window.onload=()=>{ loadLists(); openTab('formCard'); };
+    window.onload = () => { loadLists(); openTab('formCard'); };
   </script>
 </head>
 <body>
-  <header>🐔 Yarışma Hayvan Kayıt Sistemi v14.2</header>
+  <header>🐔 Yarışma Hayvan Kayıt Sistemi v14.4</header>
   <div class="container">
     <div class="nav">
       <button class="tab active" data-tab="formCard" onclick="openTab('formCard')">📝 Kayıt Formu</button>
