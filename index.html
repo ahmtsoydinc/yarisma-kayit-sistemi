@@ -3,333 +3,329 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yarışma Hayvan Kayıt Sistemi v11 (Modern Blur)</title>
+  <title>Yarışma Hayvan Kayıt Sistemi v14</title>
   <style>
-    :root{
-      --bg-grad-1:#0f172a; /* slate-900 */
-      --bg-grad-2:#1e293b; /* slate-800 */
-      --card-bg:rgba(255,255,255,.06);
-      --card-border:rgba(255,255,255,.12);
-      --glass-shadow:0 10px 30px rgba(2,6,23,.45);
-      --text:#e5e7eb; /* slate-200 */
-      --muted:#94a3b8; /* slate-400 */
-      --brand:#22c55e; /* green-500 */
-      --brand-strong:#16a34a; /* green-600 */
-      --danger:#ef4444; /* red-500 */
-      --warn:#f59e0b; /* amber-500 */
-      --line:#334155; /* slate-600 */
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(180deg, #cce5ff, #e0f2ff);
+      color: #002b5c;
+      margin: 0;
+      padding: 0;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      font-family:"Segoe UI",system-ui,-apple-system,Roboto,Arial,Helvetica,sans-serif;
-      margin:0;
-      color:var(--text);
-      background:linear-gradient(180deg,var(--bg-grad-1),var(--bg-grad-2)) fixed;
-      -webkit-font-smoothing:antialiased;
-      -moz-osx-font-smoothing:grayscale;
+    header {
+      background: #0077cc;
+      color: white;
+      text-align: center;
+      padding: 15px 0;
+      font-size: 22px;
+      font-weight: bold;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.2);
     }
-    header{
-      position:sticky; top:0; z-index:20;
-      background:linear-gradient(90deg, rgba(34,197,94,.15), rgba(34,197,94,.05));
-      border-bottom:1px solid rgba(255,255,255,.06);
-      text-align:center; padding:14px 10px; font-size:20px; font-weight:700;
-      backdrop-filter:saturate(140%) blur(6px);
-      box-shadow:0 4px 18px rgba(0,0,0,.25);
+    .container {
+      max-width: 950px;
+      margin: 20px auto;
+      padding: 20px;
     }
-    .container{max-width:980px;margin:22px auto; padding:0 16px}
-
-    /* Tabs */
-    .nav{display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin:10px auto 18px}
-    .tab{background:transparent; color:var(--text); border:1px solid var(--card-border); border-radius:12px; padding:10px 14px; cursor:pointer; transition:.2s; backdrop-filter:blur(8px)}
-    .tab:hover{border-color:rgba(255,255,255,.25)}
-    .tab.active{background:var(--brand); color:#052e16; border-color:transparent; font-weight:700}
-
-    /* Glass cards */
-    .card{
-      background:var(--card-bg);
-      border:1px solid var(--card-border);
-      border-radius:16px; padding:18px; box-shadow:var(--glass-shadow);
-      backdrop-filter:blur(12px) saturate(140%);
-      margin-bottom:22px;
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
     }
-    .card h2{margin:8px 0 14px; font-size:18px}
-
-    /* Modern inputs (underline style) */
-    .field{display:flex; align-items:center; gap:10px; margin:12px 0}
-    .icon{width:28px; height:28px; display:grid; place-items:center; border-radius:8px; background:rgba(34,197,94,.12); color:#bbf7d0}
-    .control{flex:1}
-    label{font-size:12px; color:var(--muted)}
-    input, select{
-      width:100%; background:transparent; color:var(--text); font-size:16px; border:none; outline:none;
-      border-bottom:1.5px solid var(--line); padding:10px 6px 8px 2px; border-radius:0;
+    .tab {
+      background: transparent;
+      color: #004c99;
+      border: 2px solid #0077cc;
+      border-radius: 10px;
+      padding: 10px 16px;
+      cursor: pointer;
+      transition: 0.3s;
     }
-    input:focus, select:focus{border-bottom-color:var(--brand)}
+    .tab:hover {
+      background: rgba(0,119,204,0.1);
+    }
+    .tab.active {
+      background: #0077cc;
+      color: white;
+    }
+    .card {
+      background: rgba(255,255,255,0.6);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      padding: 20px;
+      margin-bottom: 25px;
+      display: none;
+    }
+    .card.active { display: block; }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #b3d7ff;
+      background: rgba(255,255,255,0.8);
+      color: #002b5c;
+      margin-top: 5px;
+      font-size: 15px;
+    }
+    button {
+      background: #0077cc;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+    }
+    button:hover { background: #005fa3; }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .table th, .table td {
+      border-bottom: 1px solid #cce5ff;
+      padding: 10px;
+      text-align: left;
+    }
+    .table th {
+      background: #e6f3ff;
+      color: #003366;
+    }
+    .success {
+      background: #d1f7d1;
+      color: #004d00;
+      border: 1px solid #66cc66;
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 12px;
+      display: none;
+      text-align: center;
+    }
 
-    /* Switch */
-    .switch{display:inline-flex; align-items:center; gap:10px; user-select:none}
-    .switch input{display:none}
-    .track{width:44px; height:26px; background:#334155; border-radius:999px; position:relative; transition:.2s}
-    .thumb{position:absolute; top:3px; left:3px; width:20px; height:20px; border-radius:999px; background:#cbd5e1; transition:.2s}
-    .switch input:checked + .track{background:var(--brand)}
-    .switch input:checked + .track .thumb{left:21px; background:#052e16}
-
-    /* Buttons */
-    .btn{background:var(--brand); color:#052e16; border:none; padding:12px 16px; border-radius:12px; font-weight:700; cursor:pointer; transition:.2s; box-shadow:0 6px 18px rgba(34,197,94,.25)}
-    .btn:hover{background:var(--brand-strong)}
-    .btn.ghost{background:transparent; color:var(--text); border:1px solid var(--card-border); box-shadow:none}
-    .btn.loading{position:relative; pointer-events:none; opacity:.75}
-    .btn.loading:after{content:""; position:absolute; inset:auto 12px auto auto; width:16px; height:16px; border:2px solid #052e16; border-top-color:transparent; border-radius:50%; animation:spin .8s linear infinite}
-    @keyframes spin{to{transform:rotate(360deg)}}
-
-    /* Tables */
-    table{width:100%; border-collapse:collapse}
-    th,td{padding:10px 12px; border-bottom:1px solid var(--line); text-align:left}
-    th{color:#cbd5e1; background:rgba(255,255,255,.04)}
-
-    /* Alerts */
-    .success{background:rgba(34,197,94,.12); color:#bbf7d0; border:1px solid rgba(34,197,94,.35); padding:10px 12px; border-radius:10px; margin-top:12px; display:none}
-
-    .hidden{display:none}
+    /* Modal Admin Giriş */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 10;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(4px);
+      justify-content: center;
+      align-items: center;
+    }
+    .modal-content {
+      background: rgba(255,255,255,0.9);
+      padding: 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    }
+    .modal input {
+      width: 80%;
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #0077cc;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
   </style>
   <script>
-    // ==== Yapılandırma (sadece burayı değiştirmen yeter) ====
-    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxTEziLmLTCmUpCVSB6QOvLiHPAthCcRqfDfYd-8FPCcpOq9OcB0_AE78wrwZmoZ3gc/exec';
-    const SHEET_ID = '19qwcNoLZp9Pe1qiDrBo0Ptp_t23SSDpwjuVxybiNggQ';
-    const ADMIN_PASS = 'admin';
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxTEziLmLTCmUpCVSB6QOvLiHPAthCcRqfDfYd-8FPCcpOq9OcB0_AE78wrwZmoZ3gc/exec";
+    const SHEET_ID = "19qwcNoLZp9Pe1qiDrBo0Ptp_t23SSDpwjuVxybiNggQ";
+    const ADMIN_PASS = "Ahms02450**";
 
-    // ==== Yardımcılar ====
-    const $ = (s)=>document.querySelector(s);
-    const byId = (id)=>document.getElementById(id);
-
-    // TR auto-prefill for bilezik
-    function setupBilezikAuto(){
-      const b = byId('bilezik');
-      b.addEventListener('input', ()=>{
-        const v = b.value.toUpperCase().replace(/\s+/g,'');
-        b.value = v.startsWith('TR') ? v : ('TR'+v.replace(/^TR/i,''));
-      });
+    function openTab(tab) {
+      document.querySelectorAll('.card').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(tab).classList.add('active');
+      document.querySelector(`[data-tab="${tab}"]`).classList.add('active');
     }
 
-    async function kaydet(){
-      const btn = byId('btnKaydet');
-      const adSoyad = byId('adSoyad').value.trim();
-      const telefon = byId('telefon').value.trim();
-      const dernek  = byId('dernek').value.trim();
-      const tur     = byId('tur').value.trim();
-      const tip     = byId('tip').value.trim();
-      const irk     = byId('irk').value.trim();
-      const cins    = byId('cins').value.trim();
-      const renk    = byId('renk').value.trim();
-      const yil     = byId('yil').value.trim();
-      const bilezik = byId('bilezik').value.trim().toUpperCase();
-      const onay    = byId('onay').checked;
+    async function getSheetData(sheet) {
+      const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=${sheet}`);
+      const text = await res.text();
+      return text.split('\\n').slice(1).map(r => r.split(','));
+    }
 
-      if(!adSoyad || !telefon || !dernek || !bilezik){ alert('⚠️ Zorunlu alanları doldurun.'); return; }
-      if(!/^TR/.test(bilezik)){ alert('Bilezik numarası TR ile başlamalı.'); return; }
-      if(!onay){ alert('Sergi koşulları onayı gerekli.'); return; }
+    async function loadLists() {
+      try {
+        const dernekSel = document.getElementById('dernek');
+        const irkSel = document.getElementById('irk');
+        const cinsSel = document.getElementById('cins');
+        const renkSel = document.getElementById('renk');
+        const dernekler = await getSheetData("Dernekler");
+        dernekler.forEach(d => { if(d[0]) dernekSel.innerHTML += `<option>${d[0]}</option>`; });
+        const icr = await getSheetData("IrkCinsRenk");
+        const irklar = [...new Set(icr.map(r=>r[0]).filter(Boolean))];
+        irklar.forEach(i => irkSel.innerHTML += `<option>${i}</option>`);
+        irkSel.addEventListener("change",()=>{
+          cinsSel.innerHTML='<option value=\"\">Cins seçin</option>';
+          renkSel.innerHTML='<option value=\"\">Renk seçin</option>';
+          icr.filter(r=>r[0]===irkSel.value).forEach(r=>{
+            if(r[1]) cinsSel.innerHTML+=`<option>${r[1]}</option>`;
+          });
+        });
+        cinsSel.addEventListener("change",()=>{
+          renkSel.innerHTML='<option value=\"\">Renk seçin</option>';
+          icr.filter(r=>r[1]===cinsSel.value).forEach(r=>{
+            if(r[2]) renkSel.innerHTML+=`<option>${r[2]}</option>`;
+          });
+        });
+      } catch(err){ alert("Listeler yüklenemedi: "+err.message); }
+    }
 
-      const payload = { adSoyad, telefon, dernek, tur, tip, irk, cins, renk, yil, bilezik };
-      try{
-        btn.classList.add('loading'); btn.disabled = true;
-        const res = await fetch(APPS_SCRIPT_URL, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) });
-        if(!res.ok) throw new Error('HTTP '+res.status+' '+res.statusText);
-        const txt = await res.text();
-        if(/OK/i.test(txt)){
-          byId('form').reset(); byId('successMsg').style.display='block'; setTimeout(()=>byId('successMsg').style.display='none', 2500);
-        }else{ alert('Beklenmeyen yanıt: '+txt); }
-      }catch(err){
-        alert('Kaydetme sırasında hata oluştu: '+err.message);
-      }finally{
-        btn.classList.remove('loading'); btn.disabled = false;
+    async function kaydet() {
+      const adSoyad = adSoyadInput.value.trim();
+      const telefon = telefonInput.value.trim();
+      const dernek = dernekSelect.value.trim();
+      const tur = turSelect.value.trim();
+      const tip = tipSelect.value.trim();
+      const irk = irkSelect.value.trim();
+      const cins = cinsSelect.value.trim();
+      const renk = renkSelect.value.trim();
+      const yil = yilInput.value.trim();
+      const bilezik = bilezikInput.value.trim();
+      if(!adSoyad || !telefon || !dernek || !bilezik) {
+        alert("⚠️ Zorunlu alanları doldurun."); return;
+      }
+      const payload = {adSoyad, telefon, dernek, tur, tip, irk, cins, renk, yil, bilezik};
+      try {
+        const res = await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+        const text = await res.text();
+        if(/OK/i.test(text)) {
+          document.getElementById("form").reset();
+          document.getElementById("successMsg").style.display="block";
+          setTimeout(()=>document.getElementById("successMsg").style.display="none",2500);
+          addToList(payload);
+        } else alert("Beklenmeyen yanıt: "+text);
+      } catch(err){ alert("Kaydetme hatası: "+err.message); }
+    }
+
+    function addToList(row) {
+      const tbody = document.querySelector("#listeTable tbody");
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td>${tbody.children.length+1}</td><td>${row.adSoyad}</td><td>${row.telefon}</td><td>${row.dernek}</td><td>${row.tur}</td><td>${row.irk}</td><td>${row.cins}</td><td>${row.renk}</td><td>${row.bilezik}</td>`;
+      tbody.appendChild(tr);
+    }
+
+    function showAdminModal() {
+      document.getElementById("adminModal").style.display = "flex";
+      document.getElementById("adminPass").focus();
+    }
+    function closeModal() {
+      document.getElementById("adminModal").style.display = "none";
+      document.getElementById("adminPass").value = "";
+      document.getElementById("errorMsg").style.display = "none";
+    }
+    function checkAdmin() {
+      const val = document.getElementById("adminPass").value;
+      if(val === ADMIN_PASS) {
+        closeModal();
+        openTab("adminCard");
+        yukleKayitlar();
+      } else {
+        document.getElementById("errorMsg").style.display = "block";
       }
     }
 
-    async function adminGiris(){
-      const sifre = prompt('Admin şifresini giriniz:');
-      if(sifre!==ADMIN_PASS){ alert('❌ Hatalı şifre'); return; }
-      byId('adminCard').classList.remove('hidden');
-      await yukleKayitlar();
-      document.getElementById('adminCard').scrollIntoView({behavior:'smooth'});
-    }
-
-    async function yukleKayitlar(){
-      try{
-        const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Kayitlar`;
-        const res = await fetch(url, {cache:'no-store'});
-        if(!res.ok) throw new Error('HTTP '+res.status);
+    async function yukleKayitlar() {
+      try {
+        const res = await fetch(`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:csv&sheet=Kayitlar`);
         const text = await res.text();
-        const rows = text.split(/\r?\n/).filter(Boolean).map(r=>{
-          // basit CSV ayrıştırıcı (tırnak içi virgülleri kaba biçimde işler)
-          const out=[]; let cur=''; let q=false; for(const ch of r){ if(ch==='"'){ q=!q; continue; } if(ch===',' && !q){ out.push(cur); cur=''; } else { cur+=ch; } } out.push(cur); return out.map(s=>s.trim());
-        });
-        const tbody = $('#adminTable tbody'); tbody.innerHTML='';
+        const rows = text.split("\\n").map(r=>r.split(','));
+        const tbody = document.querySelector("#adminTable tbody");
+        tbody.innerHTML="";
         rows.slice(1).forEach((r,i)=>{
-          if(!r[0]) return; // Ad Soyad boşsa geç
-          const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${i+1}</td><td>${r[0]||''}</td><td>${r[1]||''}</td><td>${r[2]||''}</td><td>${r[3]||''}</td><td>${r[5]||''}</td><td>${r[6]||''}</td><td>${r[7]||''}</td><td>${r[9]||''}</td>`;
-          tbody.appendChild(tr);
+          if(r[0]) tbody.innerHTML += `<tr><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td>${r[5]}</td><td>${r[6]}</td><td>${r[7]}</td><td>${r[9]}</td></tr>`;
         });
-        alert('🔄 Kayıtlar yenilendi.');
-      }catch(err){ alert('Kayıtlar alınamadı: '+err.message); }
+      } catch(err){ alert("Kayıtlar alınamadı: "+err.message); }
     }
 
-    window.addEventListener('DOMContentLoaded', ()=>{
-      setupBilezikAuto();
-    });
+    function exportTableToExcel(id, filename='kayitlar.xlsx') {
+      const table = document.getElementById(id);
+      const html = table.outerHTML.replace(/ /g, '%20');
+      const link = document.createElement('a');
+      link.href = 'data:application/vnd.ms-excel,' + html;
+      link.download = filename;
+      link.click();
+    }
+
+    window.onload = ()=>{ loadLists(); openTab('formCard'); };
   </script>
 </head>
 <body>
-  <header>🐔 Yarışma Hayvan Kayıt Sistemi v11</header>
+  <header>🐔 Yarışma Hayvan Kayıt Sistemi v14</header>
   <div class="container">
     <div class="nav">
-      <button class="tab active" onclick="document.getElementById('formCard').scrollIntoView({behavior:'smooth'})">📋 Kayıt Formu</button>
-      <button class="tab" onclick="document.getElementById('listeCard').scrollIntoView({behavior:'smooth'})">✅ Onay & Liste</button>
-      <button class="tab" onclick="adminGiris()">👑 Admin Paneli</button>
+      <button class="tab active" data-tab="formCard" onclick="openTab('formCard')">📝 Kayıt Formu</button>
+      <button class="tab" data-tab="listeCard" onclick="openTab('listeCard')">📋 Onay & Liste</button>
+      <button class="tab" onclick="showAdminModal()">👑 Admin Paneli</button>
     </div>
 
-    <!-- FORM -->
-    <section id="formCard" class="card">
-      <h2>Modern Kayıt Formu</h2>
+    <div id="formCard" class="card active">
+      <h2>Kayıt Formu</h2>
       <form id="form" onsubmit="event.preventDefault(); kaydet();">
-        <div class="field">
-          <div class="icon">👤</div>
-          <div class="control">
-            <label>Ad Soyad*</label>
-            <input id="adSoyad" placeholder="Örn: Ahmet Yılmaz" required />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">📞</div>
-          <div class="control">
-            <label>Telefon*</label>
-            <input id="telefon" inputmode="numeric" pattern="[0-9]{10,15}" placeholder="5XXXXXXXXX" required />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🏛️</div>
-          <div class="control">
-            <label>Dernek*</label>
-            <input id="dernek" placeholder="Dernek adını yazınız" required />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🐓</div>
-          <div class="control">
-            <label>Tür</label>
-            <select id="tur">
-              <option value="Tavuk">Tavuk</option>
-              <option value="Horoz">Horoz</option>
-              <option value="Kaz">Kaz</option>
-              <option value="Ördek">Ördek</option>
-              <option value="Tavşan">Tavşan</option>
-              <option value="Güvercin">Güvercin</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🔢</div>
-          <div class="control">
-            <label>Kayıt Tipi (K/T)</label>
-            <select id="tip">
-              <option value="K">Koleksiyon</option>
-              <option value="T">Tek Hayvan</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🧬</div>
-          <div class="control">
-            <label>Irk</label>
-            <input id="irk" placeholder="Irk" />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🪶</div>
-          <div class="control">
-            <label>Cins</label>
-            <input id="cins" placeholder="Cins" />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🎨</div>
-          <div class="control">
-            <label>Renk</label>
-            <input id="renk" placeholder="Renk" />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">📅</div>
-          <div class="control">
-            <label>Yıl</label>
-            <input id="yil" type="number" min="2000" max="2100" placeholder="2025" />
-          </div>
-        </div>
-
-        <div class="field">
-          <div class="icon">🆔</div>
-          <div class="control">
-            <label>Bilezik No*</label>
-            <input id="bilezik" placeholder="TR..." required />
-          </div>
-        </div>
-
-        <div class="field" style="align-items:center">
-          <div class="icon">✅</div>
-          <label class="switch">
-            <input id="onay" type="checkbox" />
-            <span class="track"><span class="thumb"></span></span>
-          </label>
-          <div class="control"><label>Girilen bilgilerin doğruluğunu ve Sergi koşullarını onaylıyorum.</label></div>
-        </div>
-
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:8px">
-          <button id="btnKaydet" type="submit" class="btn">💾 Onayla ve Kaydet</button>
-          <button type="reset" class="btn ghost">Temizle</button>
-        </div>
+        <label>Ad Soyad*</label><input id="adSoyadInput" required />
+        <label>Telefon*</label><input id="telefonInput" required />
+        <label>Dernek*</label><select id="dernekSelect"><option value="">Seçiniz</option></select>
+        <label>Tür</label><select id="turSelect"><option>Tavuk</option><option>Horoz</option><option>Kaz</option><option>Ördek</option><option>Tavşan</option><option>Güvercin</option></select>
+        <label>K/T</label><select id="tipSelect"><option value="K">Kolleksiyon</option><option value="T">Tek Hayvan</option></select>
+        <label>Irk</label><select id="irkSelect"><option value="">Seçiniz</option></select>
+        <label>Cins</label><select id="cinsSelect"><option value="">Seçiniz</option></select>
+        <label>Renk</label><select id="renkSelect"><option value="">Seçiniz</option></select>
+        <label>Yıl</label><input id="yilInput" type="number" />
+        <label>Bilezik No*</label><input id="bilezikInput" placeholder="TR..." required />
+        <div style="margin-top:10px;"><input type="checkbox" id="onay" required /> <label for="onay">Girilen bilgilerin doğruluğunu ve sergi koşullarını onaylıyorum.</label></div>
+        <button type="submit" style="margin-top:15px;">💾 Kaydet</button>
         <div id="successMsg" class="success">✅ Kayıt başarıyla eklendi!</div>
       </form>
-    </section>
+    </div>
 
-    <!-- LİSTE (placeholder - istersen buraya geçici tablo bağlayabiliriz) -->
-    <section id="listeCard" class="card">
-      <h2>Eklenen Hayvanlar (Admin panelinden görüntüleyin)</h2>
-      <p class="muted" style="color:var(--muted)">Not: Kayıtlar Google Sheet'e yazılır. Görüntülemek için aşağıdaki Admin Panelini kullanabilirsiniz.</p>
-    </section>
+    <div id="listeCard" class="card">
+      <h2>Eklenen Hayvanlar</h2>
+      <table id="listeTable" class="table">
+        <thead><tr><th>#</th><th>Ad Soyad</th><th>Telefon</th><th>Dernek</th><th>Tür</th><th>Irk</th><th>Cins</th><th>Renk</th><th>Bilezik</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
 
-    <!-- ADMIN -->
-    <section id="adminCard" class="card hidden">
+    <div id="adminCard" class="card">
       <h2>👑 Admin Paneli</h2>
-      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px">
-        <button class="btn" onclick="yukleKayitlar()">🔄 Buluttan Yenile</button>
+      <button onclick="yukleKayitlar()">🔄 Buluttan Yenile</button>
+      <button onclick="exportTableToExcel('adminTable')">📥 Excel İndir</button>
+      <table id="adminTable" class="table">
+        <thead><tr><th>#</th><th>Ad Soyad</th><th>Telefon</th><th>Dernek</th><th>Tür</th><th>Irk</th><th>Cins</th><th>Renk</th><th>Bilezik</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="adminModal" class="modal">
+    <div class="modal-content">
+      <h3>🔐 Admin Girişi</h3>
+      <input id="adminPass" type="password" placeholder="Şifre giriniz" />
+      <div id="errorMsg" class="error">❌ Hatalı şifre!</div>
+      <div style="margin-top:15px;">
+        <button onclick="checkAdmin()">Giriş Yap</button>
+        <button style="background:#ccc;color:#003366;margin-left:10px;" onclick="closeModal()">İptal</button>
       </div>
-      <div style="overflow:auto">
-        <table id="adminTable">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Ad Soyad</th>
-              <th>Telefon</th>
-              <th>Dernek</th>
-              <th>Tür</th>
-              <th>Irk</th>
-              <th>Cins</th>
-              <th>Renk</th>
-              <th>Bilezik</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
+    </div>
   </div>
 </body>
 </html>
+
